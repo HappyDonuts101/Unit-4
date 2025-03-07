@@ -52,7 +52,7 @@ void tactile(int x, int y, int w, int h) {
 }
 
 void strawberryOnOff() {
-  if (strawberryOn == true) {  // Check strawberryOn instead of durianOn
+  if (strawberryOn == true) { 
     stroke(255, 0, 0);
     strokeWeight(5);
   } else {
