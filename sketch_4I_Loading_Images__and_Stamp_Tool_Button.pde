@@ -1,186 +1,237 @@
-// Simple Paint App in Processing
-// Features: 8 vibrant colors, thickness slider, stamp tool, New/Save/Load buttons
+// Paint App, Ethan Song 2025 3-10
 
 // Global variables
-PImage strawberry; // Image for stamp tool
-boolean stampOn = false; // Toggle stamp tool
-color selectedColor = color(0); // Default color is black
-float strokeWeightValue = 5; // Default stroke thickness
-float sliderX = 100; // Slider position (left to right)
-PGraphics canvas; // Separate graphics buffer for the canvas
+PImage strawberry; 
+boolean stampOn = false; // Stamp tool 
+boolean eraserOn = false; // Eraser tool
+color selectedColor = color(0); // Currently selected color 
+float strokeWeightValue = 5; 
+float sliderX = 100; // Slider 
+
+//Color variables
+color blue = #0000FF;
+color purple = #A020F0;
+color green = #00FF00;
+color pink = #FFC0CB;
+color red = #FF0000;
+color orange = #FFA500;
+color yellow = #FFFF00;
+color maroon = #800000;
 
 void setup() {
-  size(1000, 800);
-  background(255);
-  strawberry = loadImage("strawberry.png"); // Load strawberry image
-
-  // Create a separate graphics buffer for the canvas
-  canvas = createGraphics(width - 200, height);
-  canvas.beginDraw();
-  canvas.background(255);
-  canvas.endDraw();
+size(1000, 800); // 
+background(255); // 
+strawberry = loadImage("strawberry.png"); 
 }
 
 void draw() {
-  drawToolbar(); // Draw the toolbar on the left side
-  drawCanvas(); // Handle drawing on the canvas
+drawToolbar(); 
+drawCanvas(); 
 }
 
+// Toolbar
 void drawToolbar() {
-  // Draw toolbar background
-  fill(200);
-  noStroke();
-  rect(0, 0, 200, height);
+// Toolbar background
+fill(200); 
+noStroke(); 
+rect(0, 0, 200, 800); 
 
-  // Draw separator line
-  stroke(0);
-  strokeWeight(2);
-  line(200, 0, 200, height);
+//Seperation line between toolbar and canvas
+stroke(0); 
+strokeWeight(2);
+line(200, 0, 200, 800); 
 
-  // Draw 8 vibrant color buttons
-  color[] colors = {
-    color(0, 0, 255), // Blue
-    color(128, 0, 128), // Purple
-    color(0, 255, 0), // Green
-    color(255, 192, 203), // Pink
-    color(255, 0, 0), // Red
-    color(255, 165, 0), // Orange
-    color(255, 255, 0), // Yellow
-    color(0, 255, 255) // Cyan
-  };
+// Color buttons
+fill(blue); // Blue button
+tactileRect(50, 50, 100, 30); 
+rect(50, 50, 100, 30); 
 
-  // Loop through colors using a simpler counter
-  int counter = 0;
-  while (counter < colors.length) {
-    fill(colors[counter]);
-    tactileRect(50, 50 + counter * 50, 100, 30); // Tactile effect
-    rect(50, 50 + counter * 50, 100, 30); // Draw color button
-    counter = counter + 1; // Increment counter
-  }
+fill (purple); // Purple button
+tactileRect(50, 100, 100, 30);
+rect(50, 100, 100, 30);
 
-  // Draw thickness slider (left to right)
-  fill(150);
-  rect(50, 500, 100, 10); // Slider track
-  fill(100);
-  circle(sliderX, 505, 20); // Slider handle
+fill(#green); // Green button
+tactileRect(50, 150, 100, 30);
+rect(50, 150, 100, 30);
 
-  // Draw stamp button
-  tactileRect(50, 550, 100, 50); // Tactile effect
-  fill(255);
-  rect(50, 550, 100, 50); // Stamp button background
-  image(strawberry, 50, 550, 100, 50); // Draw strawberry image
+fill(pink); // Pink button
+tactileRect(50, 200, 100, 30);
+rect(50, 200, 100, 30);
 
-  // Draw New, Save, Load buttons
-  tactileRect(50, 620, 100, 30); // New button
-  fill(255);
-  rect(50, 620, 100, 30);
-  fill(0);
-  textSize(16);
-  text("New", 80, 640);
+fill(#red); // Red
+tactileRect(50, 250, 100, 30);
+rect(50, 250, 100, 30);
 
-  tactileRect(50, 660, 100, 30); // Save button
-  fill(255);
-  rect(50, 660, 100, 30);
-  fill(0);
-  text("Save", 80, 680);
+fill(#orange); // Orange
+tactileRect(50, 300, 100, 30);
+rect(50, 300, 100, 30);
 
-  tactileRect(50, 700, 100, 30); // Load button
-  fill(255);
-  rect(50, 700, 100, 30);
-  fill(0);
-  text("Load", 80, 720);
+fill(yellow); // Yellow button
+tactileRect(50, 350, 100, 30);
+rect(50, 350, 100, 30);
+
+fill(maroon); // Maroon button
+tactileRect(50, 400, 100, 30);
+rect(50, 400, 100, 30);
+
+//Thickness slider
+fill(150); 
+rect(50, 500, 100, 10); 
+fill(100); 
+circle(sliderX, 505, 20); 
+
+//Stamp button
+tactileRect(50, 550, 100, 50); 
+fill(255); 
+rect(50, 550, 100, 50); 
+image(strawberry, 50, 550, 100, 50); 
+
+// Eraser button
+tactileRect(50, 620, 100, 30); 
+fill(255); 
+rect(50, 620, 100, 30); 
+fill(0); 
+textSize(16); 
+text("Eraser", 70, 640); // Text for eraser.
+
+//  New, Save, and Load buttons
+
+// New button
+tactileRect(50, 660, 100, 30); 
+fill(255); 
+rect(50, 660, 100, 30); 
+fill(0); 
+text("New", 80, 680); // Draw the "New" text
+
+// Save button
+tactileRect(50, 700, 100, 30);
+fill(255); 
+rect(50, 700, 100, 30); 
+fill(0); 
+text("Save", 80, 720); 
+
+// Load button
+tactileRect(50, 740, 100, 30); 
+fill(255); 
+rect(50, 740, 100, 30); 
+fill(0); // Black text
+text("Load", 80, 760); 
 }
 
+//FUnction for canvas drawings
 void drawCanvas() {
-  // Display the canvas buffer
-  image(canvas, 200, 0);
-
-  // Draw on canvas (right side of the screen)
-  if (mousePressed && mouseX > 200) {
-    if (stampOn) {
-      // Stamp mode
-      canvas.beginDraw();
-      canvas.image(strawberry, mouseX - 225, mouseY - 25, 50, 50); // Draw strawberry
-      canvas.endDraw();
-    } else {
-      // Squiggly line mode
-      canvas.beginDraw();
-      canvas.stroke(selectedColor);
-      canvas.strokeWeight(strokeWeightValue);
-      canvas.line(pmouseX - 200, pmouseY, mouseX - 200, mouseY); // Draw squiggly line
-      canvas.endDraw();
-    }
-  }
-}
-
-void tactileRect(int x, int y, int w, int h) {
-  // Highlight button on hover
-  if (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
-    stroke(255, 0, 0); // Red border on hover
+// Check if the mouse is pressed and on the canvas.
+if (mousePressed && mouseX > 200) {
+  if (stampOn) {
+    // Stamp mode, draw strawberry image in the mouse position.
+    image(strawberry, mouseX - 25, mouseY - 25, 50, 50);
+  } else if (eraserOn) {
+    // Eraser
+    stroke(255);
+    strokeWeight(strokeWeightValue * 2); //Makes eraser thicker
+    line(pmouseX, pmouseY, mouseX, mouseY); 
   } else {
-    stroke(0); // Black border
+    // Squiggly line: draw line with the selected color
+    stroke(selectedColor); 
+    strokeWeight(strokeWeightValue); 
+    line(pmouseX, pmouseY, mouseX, mouseY); 
   }
 }
+}
 
+//Makes button tactile
+void tactileRect(int x, int y, int w, int h) {
+// Check if the mouse is on the button.
+if (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
+  stroke(255, 0, 0); 
+} else {
+  stroke(0); 
+}
+}
+
+// Checks for mouse clicks
 void mouseReleased() {
-  // Handle color button clicks
-  color[] colors = {
-    color(0, 0, 255), // Blue
-    color(128, 0, 128), // Purple
-    color(0, 255, 0), // Green
-    color(255, 192, 203), // Pink
-    color(255, 0, 0), // Red
-    color(255, 165, 0), // Orange
-    color(255, 255, 0), // Yellow
-    color(0, 255, 255) // Cyan
-  };
-
-  // Loop through colors using a simpler counter
-  int counter = 0;
-  while (counter < colors.length) {
-    if (mouseX > 50 && mouseX < 150 && mouseY > 50 + counter * 50 && mouseY < 80 + counter * 50) {
-      selectedColor = colors[counter]; // Set selected color
-      stampOn = false; // Turn off stamp mode
-    }
-    counter = counter + 1; // Increment counter
-  }
-
-  // Handle stamp button click
-  if (mouseX > 50 && mouseX < 150 && mouseY > 550 && mouseY < 600) {
-    stampOn = !stampOn; // Toggle stamp mode
-  }
-
-  // Handle New button click
-  if (mouseX > 50 && mouseX < 150 && mouseY > 620 && mouseY < 650) {
-    canvas.beginDraw();
-    canvas.background(255); // Clear canvas
-    canvas.endDraw();
-  }
-
-  // Handle Save button click
-  if (mouseX > 50 && mouseX < 150 && mouseY > 660 && mouseY < 690) {
-    canvas.save("painting.png"); // Save canvas as image
-    println("Canvas saved as painting.png");
-  }
-
-  // Handle Load button click
-  if (mouseX > 50 && mouseX < 150 && mouseY > 700 && mouseY < 730) {
-    PImage loadedImage = loadImage("painting.png");
-    if (loadedImage == null) {
-      println("No saved image found.");
-    } else {
-      canvas.beginDraw();
-      canvas.image(loadedImage, 0, 0); // Load and display saved image
-      canvas.endDraw();
-      println("Canvas loaded from painting.png");
-    }
-  }
+if (mouseX > 50 && mouseX < 150 && mouseY > 50 && mouseY < 80) {
+  selectedColor = color(0, 0, 255); // Blue
+  stampOn = false; //No stamp mode
+  eraserOn = false; //No eraser mode
+}
+if (mouseX > 50 && mouseX < 150 && mouseY > 100 && mouseY < 130) {
+  selectedColor = color(128, 0, 128); // Purple
+  stampOn = false; 
+  eraserOn = false;
+}
+if (mouseX > 50 && mouseX < 150 && mouseY > 150 && mouseY < 180) {
+  selectedColor = color(0, 255, 0); // Green
+  stampOn = false;
+  eraserOn = false;
+}
+if (mouseX > 50 && mouseX < 150 && mouseY > 200 && mouseY < 230) {
+  selectedColor = color(255, 192, 203); // Pink
+  stampOn = false;
+  eraserOn = false;
+}
+if (mouseX > 50 && mouseX < 150 && mouseY > 250 && mouseY < 280) {
+  selectedColor = color(255, 0, 0); // Red
+  stampOn = false;
+  eraserOn = false;
+}
+if (mouseX > 50 && mouseX < 150 && mouseY > 300 && mouseY < 330) {
+  selectedColor = color(255, 165, 0); // Orange
+  stampOn = false;
+  eraserOn = false;
+}
+if (mouseX > 50 && mouseX < 150 && mouseY > 350 && mouseY < 380) {
+  selectedColor = color(255, 255, 0); // Yellow
+  stampOn = false;
+  eraserOn = false;
+}
+if (mouseX > 50 && mouseX < 150 && mouseY > 400 && mouseY < 430) {
+  selectedColor = color(0, 255, 255); // Maroon
+  stampOn = false;
+  eraserOn = false;
 }
 
-void mouseDragged() {
-  // Adjust slider position (left to right)
-  if (mouseX > 50 && mouseX < 150 && mouseY > 500 && mouseY < 510) {
-    sliderX = mouseX; // Update slider position
-    strokeWeightValue = map(sliderX, 50, 150, 1, 20); // Map slider to thickness
+// Stamp button click
+if (mouseX > 50 && mouseX < 150 && mouseY > 550 && mouseY < 600) {
+  stampOn = !stampOn; // Use stamp
+  eraserOn = false; // Turn off eraser mode
+}
+
+//Eraser button click
+if (mouseX > 50 && mouseX < 150 && mouseY > 620 && mouseY < 650) {
+  eraserOn = !eraserOn; // Use eraser mode
+  stampOn = false; 
+}
+
+// New Button Function
+if (mouseX > 50 && mouseX < 150 && mouseY > 660 && mouseY < 690) {
+  background(255); //Clears canvas by setting background to white.
+}
+
+// Save button functino
+if (mouseX > 50 && mouseX < 150 && mouseY > 700 && mouseY < 730) {
+  save("painting.png");
+  println("Canvas saved as painting.png");
+}
+
+// Handle Load button click
+if (mouseX > 50 && mouseX < 150 && mouseY > 740 && mouseY < 770) {
+  PImage loadedImage = loadImage("painting.png"); // Load the saved image
+  if (loadedImage == null) {
+    println("No saved image found."); // Print error if no image is found
+  } else {
+    background(255); // Clear the canvas before loading
+    image(loadedImage, 200, 0); 
+    println("Canvas loaded from painting.png");
   }
+}
+}
+
+//Slider movement
+void mouseDragged() {
+if (mouseX > 50 && mouseX < 150 && mouseY > 500 && mouseY < 510) {
+  sliderX = mouseX; 
+  strokeWeightValue = map(sliderX, 50, 150, 1, 20); // Slider position changes thickness
+}
 }
